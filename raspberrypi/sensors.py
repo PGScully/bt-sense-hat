@@ -43,7 +43,7 @@ class SensorsService(Service):
     SENSORS_SERVICE_UUID = "00000001-710e-4a5b-8d75-3e5b444bc3cf"
 
     def __init__(self, index):
-        self.farenheit = True
+        self.farenheit = False
 
         Service.__init__(self, index, self.SENSORS_SERVICE_UUID, True)
         self.add_characteristic(TemperatureCharacteristic(self))
