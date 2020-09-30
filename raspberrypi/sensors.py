@@ -48,7 +48,7 @@ class SensorsService(Service):
         Service.__init__(self, index, self.SENSORS_SERVICE_UUID, True)
         self.add_characteristic(TemperatureCharacteristic(self))
         self.add_characteristic(UnitCharacteristic(self))
-        self.add_characteristic(HumudityCharacteristic(self))
+        self.add_characteristic(HumidityCharacteristic(self))
 
     def is_farenheit(self):
         return self.farenheit
@@ -178,7 +178,7 @@ class UnitDescriptor(Descriptor):
         return value
 
 
-class HumudityCharacteristic(Characteristic):
+class HumidityCharacteristic(Characteristic):
     HUMIDITY_CHARACTERISTCI_UUID = "00000004-710e-4a5b-8d75-3e5b444bc3cf"
 
     def __init__(self, service):
