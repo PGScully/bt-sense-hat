@@ -49,6 +49,7 @@ class SensorsService(Service):
         self.add_characteristic(TemperatureCharacteristic(self))
         self.add_characteristic(UnitCharacteristic(self))
         self.add_characteristic(HumidityCharacteristic(self))
+        self.add_characteristic(PressureCharacteristic(self))
 
     def is_farenheit(self):
         return self.farenheit
@@ -239,6 +240,74 @@ class HumidityDescriptor(Descriptor):
     def ReadValue(self, options):
         value = []
         desc = self.HUMIDITY_DESCRIPTOR_VALUE
+
+        for c in desc:
+            value.append(dbus.Byte(c.encode()))
+
+        return value
+
+
+class PressureCharacteristic(Characteristic):
+    PRESSURE_CHARACTERISTCI_UUID = "00000005-710e-4a5b-8d75-3e5b444bc3cf"
+
+    def __init__(self, service):
+        self.notifying = False
+
+        Characteristic.__init__(
+            self, self.PRESSURE_CHARACTERISTCI_UUID,
+            ["notify", "read"], service)
+        self.add_descriptor(PressureDescriptor(self))
+
+    def get_pressure(self):
+        value = []
+
+        pressure = sense.pressure
+        print("pressure = {}".format(pressure))
+        strpressure = str(round(pressure, 1)) + " hPa"
+        for c in strpressure:
+            value.append(dbus.Byte(c.encode()))
+
+        return value
+
+    def set_pressure_callback(self):
+        if self.notifying:
+            value = self.pressure()
+            self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
+
+        return self.notifying
+
+    def StartNotify(self):
+        if self.notifying:
+            return
+
+        self.notifying = True
+
+        value = self.get_pressure()
+        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
+        self.add_timeout(NOTIFY_TIMEOUT, self.set_pressure_callback)
+
+    def StopNotify(self):
+        self.notifying = False
+
+    def ReadValue(self, options):
+        value = self.get_pressure()
+
+        return value
+
+
+class PressureDescriptor(Descriptor):
+    PRESSURE_DESCRIPTOR_UUID = "2901"
+    PRESSURE_DESCRIPTOR_VALUE = "Pressure"
+
+    def __init__(self, characteristic):
+        Descriptor.__init__(
+            self, self.PRESSURE_DESCRIPTOR_UUID,
+            ["read"],
+            characteristic)
+
+    def ReadValue(self, options):
+        value = []
+        desc = self.PRESSURE_DESCRIPTOR_VALUE
 
         for c in desc:
             value.append(dbus.Byte(c.encode()))
