@@ -115,7 +115,7 @@ class Advertisement(dbus.service.Object):
                          in_signature='',
                          out_signature='')
     def Release(self):
-        print ('%s: Released!' % self.path)
+        print('%s: Released!' % self.path)
 
     def register_ad_callback(self):
         print("GATT advertisement registered")
@@ -128,7 +128,7 @@ class Advertisement(dbus.service.Object):
         adapter = BleTools.find_adapter(bus)
 
         ad_manager = dbus.Interface(bus.get_object(BLUEZ_SERVICE_NAME, adapter),
-                                LE_ADVERTISING_MANAGER_IFACE)
+                                    LE_ADVERTISING_MANAGER_IFACE)
         ad_manager.RegisterAdvertisement(self.get_path(), {},
-                                     reply_handler=self.register_ad_callback,
-                                     error_handler=self.register_ad_error_callback)
+                                         reply_handler=self.register_ad_callback,
+                                         error_handler=self.register_ad_error_callback)

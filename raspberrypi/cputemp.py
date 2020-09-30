@@ -25,16 +25,19 @@ import dbus
 
 from advertisement import Advertisement
 from service import Application, Service, Characteristic, Descriptor
-from gpiozero import CPUTemperature
+# from gpiozero import CPUTemperature
+from sense_hat import SenseHat
 
 GATT_CHRC_IFACE = "org.bluez.GattCharacteristic1"
 NOTIFY_TIMEOUT = 5000
 
+
 class ThermometerAdvertisement(Advertisement):
     def __init__(self, index):
         Advertisement.__init__(self, index, "peripheral")
-        self.add_local_name("Thermometer")
+        self.add_local_name("Sense Hat Environment")
         self.include_tx_power = True
+
 
 class ThermometerService(Service):
     THERMOMETER_SVC_UUID = "00000001-710e-4a5b-8d75-3e5b444bc3cf"
@@ -52,6 +55,7 @@ class ThermometerService(Service):
     def set_farenheit(self, farenheit):
         self.farenheit = farenheit
 
+
 class TempCharacteristic(Characteristic):
     TEMP_CHARACTERISTIC_UUID = "00000002-710e-4a5b-8d75-3e5b444bc3cf"
 
@@ -59,16 +63,16 @@ class TempCharacteristic(Characteristic):
         self.notifying = False
 
         Characteristic.__init__(
-                self, self.TEMP_CHARACTERISTIC_UUID,
-                ["notify", "read"], service)
+            self, self.TEMP_CHARACTERISTIC_UUID,
+            ["notify", "read"], service)
         self.add_descriptor(TempDescriptor(self))
 
     def get_temperature(self):
         value = []
         unit = "C"
 
-        cpu = CPUTemperature()
-        temp = cpu.temperature
+        # cpu = CPUTemperature()
+        temp = sense.temperature
         if self.service.is_farenheit():
             temp = (temp * 1.8) + 32
             unit = "F"
@@ -104,15 +108,16 @@ class TempCharacteristic(Characteristic):
 
         return value
 
+
 class TempDescriptor(Descriptor):
     TEMP_DESCRIPTOR_UUID = "2901"
-    TEMP_DESCRIPTOR_VALUE = "CPU Temperature"
+    TEMP_DESCRIPTOR_VALUE = "Temperature"
 
     def __init__(self, characteristic):
         Descriptor.__init__(
-                self, self.TEMP_DESCRIPTOR_UUID,
-                ["read"],
-                characteristic)
+            self, self.TEMP_DESCRIPTOR_UUID,
+            ["read"],
+            characteristic)
 
     def ReadValue(self, options):
         value = []
@@ -123,13 +128,14 @@ class TempDescriptor(Descriptor):
 
         return value
 
+
 class UnitCharacteristic(Characteristic):
     UNIT_CHARACTERISTIC_UUID = "00000003-710e-4a5b-8d75-3e5b444bc3cf"
 
     def __init__(self, service):
         Characteristic.__init__(
-                self, self.UNIT_CHARACTERISTIC_UUID,
-                ["read", "write"], service)
+            self, self.UNIT_CHARACTERISTIC_UUID,
+            ["read", "write"], service)
         self.add_descriptor(UnitDescriptor(self))
 
     def WriteValue(self, value, options):
@@ -142,11 +148,14 @@ class UnitCharacteristic(Characteristic):
     def ReadValue(self, options):
         value = []
 
-        if self.service.is_farenheit(): val = "F"
-        else: val = "C"
+        if self.service.is_farenheit():
+            val = "F"
+        else:
+            val = "C"
         value.append(dbus.Byte(val.encode()))
 
         return value
+
 
 class UnitDescriptor(Descriptor):
     UNIT_DESCRIPTOR_UUID = "2901"
@@ -154,9 +163,9 @@ class UnitDescriptor(Descriptor):
 
     def __init__(self, characteristic):
         Descriptor.__init__(
-                self, self.UNIT_DESCRIPTOR_UUID,
-                ["read"],
-                characteristic)
+            self, self.UNIT_DESCRIPTOR_UUID,
+            ["read"],
+            characteristic)
 
     def ReadValue(self, options):
         value = []
@@ -166,6 +175,9 @@ class UnitDescriptor(Descriptor):
             value.append(dbus.Byte(c.encode()))
 
         return value
+
+
+sense = SenseHat()
 
 app = Application()
 app.add_service(ThermometerService(0))
