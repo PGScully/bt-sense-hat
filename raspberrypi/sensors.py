@@ -74,7 +74,6 @@ class TemperatureCharacteristic(Characteristic):
         unit = "C"
 
         temp = sense.temperature
-        print("temp = {}".format(temp))
         if self.service.is_farenheit():
             temp = (temp * 1.8) + 32
             unit = "F"
@@ -194,7 +193,6 @@ class HumidityCharacteristic(Characteristic):
         value = []
 
         humidity = sense.humidity
-        print("humidity = {}".format(humidity))
         strhumidity = str(round(humidity, 1)) + "%"
         for c in strhumidity:
             value.append(dbus.Byte(c.encode()))
@@ -262,7 +260,6 @@ class PressureCharacteristic(Characteristic):
         value = []
 
         pressure = sense.pressure
-        print("pressure = {}".format(pressure))
         strpressure = str(round(pressure, 1)) + " hPa"
         for c in strpressure:
             value.append(dbus.Byte(c.encode()))
