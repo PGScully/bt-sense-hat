@@ -32,22 +32,23 @@ GATT_CHRC_IFACE = "org.bluez.GattCharacteristic1"
 NOTIFY_TIMEOUT = 5000
 
 
-class ThermometerAdvertisement(Advertisement):
+class SensorsAdvertisement(Advertisement):
     def __init__(self, index):
         Advertisement.__init__(self, index, "peripheral")
         self.add_local_name("Sense Hat Environment")
         self.include_tx_power = True
 
 
-class ThermometerService(Service):
-    THERMOMETER_SVC_UUID = "00000001-710e-4a5b-8d75-3e5b444bc3cf"
+class SensorsService(Service):
+    SENSORS_SERVICE_UUID = "00000001-710e-4a5b-8d75-3e5b444bc3cf"
 
     def __init__(self, index):
         self.farenheit = True
 
-        Service.__init__(self, index, self.THERMOMETER_SVC_UUID, True)
-        self.add_characteristic(TempCharacteristic(self))
+        Service.__init__(self, index, self.SENSORS_SERVICE_UUID, True)
+        self.add_characteristic(TemperatureCharacteristic(self))
         self.add_characteristic(UnitCharacteristic(self))
+        self.add_characteristic(HumudityCharacteristic(self))
 
     def is_farenheit(self):
         return self.farenheit
@@ -56,23 +57,23 @@ class ThermometerService(Service):
         self.farenheit = farenheit
 
 
-class TempCharacteristic(Characteristic):
-    TEMP_CHARACTERISTIC_UUID = "00000002-710e-4a5b-8d75-3e5b444bc3cf"
+class TemperatureCharacteristic(Characteristic):
+    TEMPERATURE_CHARACTERISTIC_UUID = "00000002-710e-4a5b-8d75-3e5b444bc3cf"
 
     def __init__(self, service):
         self.notifying = False
 
         Characteristic.__init__(
-            self, self.TEMP_CHARACTERISTIC_UUID,
+            self, self.TEMPERATURE_CHARACTERISTIC_UUID,
             ["notify", "read"], service)
-        self.add_descriptor(TempDescriptor(self))
+        self.add_descriptor(TemperatureDescriptor(self))
 
     def get_temperature(self):
         value = []
         unit = "C"
 
-        # cpu = CPUTemperature()
         temp = sense.temperature
+        print("temp = {}".format(temp))
         if self.service.is_farenheit():
             temp = (temp * 1.8) + 32
             unit = "F"
@@ -109,19 +110,19 @@ class TempCharacteristic(Characteristic):
         return value
 
 
-class TempDescriptor(Descriptor):
-    TEMP_DESCRIPTOR_UUID = "2901"
-    TEMP_DESCRIPTOR_VALUE = "Temperature"
+class TemperatureDescriptor(Descriptor):
+    TEMPERATURE_DESCRIPTOR_UUID = "2901"
+    TEMPERATURE_DESCRIPTOR_VALUE = "Temperature"
 
     def __init__(self, characteristic):
         Descriptor.__init__(
-            self, self.TEMP_DESCRIPTOR_UUID,
+            self, self.TEMPERATURE_DESCRIPTOR_UUID,
             ["read"],
             characteristic)
 
     def ReadValue(self, options):
         value = []
-        desc = self.TEMP_DESCRIPTOR_VALUE
+        desc = self.TEMPERATURE_DESCRIPTOR_VALUE
 
         for c in desc:
             value.append(dbus.Byte(c.encode()))
@@ -177,13 +178,81 @@ class UnitDescriptor(Descriptor):
         return value
 
 
+class HumudityCharacteristic(Characteristic):
+    HUMIDITY_CHARACTERISTCI_UUID = "00000004-710e-4a5b-8d75-3e5b444bc3cf"
+
+    def __init__(self, service):
+        self.notifying = False
+
+        Characteristic.__init__(
+            self, self.HUMIDITY_CHARACTERISTCI_UUID,
+            ["notify", "read"], service)
+        self.add_descriptor(HumidityDescriptor(self))
+
+    def get_humidity(self):
+        value = []
+
+        humidity = sense.humidity
+        print("humidity = {}".format(humidity))
+        strhumidity = str(round(humidity, 1)) + "%"
+        for c in strhumidity:
+            value.append(dbus.Byte(c.encode()))
+
+        return value
+
+    def set_humidity_callback(self):
+        if self.notifying:
+            value = self.get_humidity()
+            self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
+
+        return self.notifying
+
+    def StartNotify(self):
+        if self.notifying:
+            return
+
+        self.notifying = True
+
+        value = self.get_humidity()
+        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
+        self.add_timeout(NOTIFY_TIMEOUT, self.set_humidity_callback)
+
+    def StopNotify(self):
+        self.notifying = False
+
+    def ReadValue(self, options):
+        value = self.get_humidity()
+
+        return value
+
+
+class HumidityDescriptor(Descriptor):
+    HUMIDITY_DESCRIPTOR_UUID = "2901"
+    HUMIDITY_DESCRIPTOR_VALUE = "Humidity"
+
+    def __init__(self, characteristic):
+        Descriptor.__init__(
+            self, self.HUMIDITY_DESCRIPTOR_UUID,
+            ["read"],
+            characteristic)
+
+    def ReadValue(self, options):
+        value = []
+        desc = self.HUMIDITY_DESCRIPTOR_VALUE
+
+        for c in desc:
+            value.append(dbus.Byte(c.encode()))
+
+        return value
+
+
 sense = SenseHat()
 
 app = Application()
-app.add_service(ThermometerService(0))
+app.add_service(SensorsService(0))
 app.register()
 
-adv = ThermometerAdvertisement(0)
+adv = SensorsAdvertisement(0)
 adv.register()
 
 try:
