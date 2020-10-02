@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
-import 'package:bt_sense_hat/device_screen.dart';
+import 'package:bt_sense_hat/ui_device/device_screen.dart';
 
 class ConnectedDeviceTile extends StatelessWidget {
   final BluetoothDevice device;
@@ -30,34 +30,6 @@ class ConnectedDeviceTile extends StatelessWidget {
             }
             return Text(snapshot.data.toString());
           },
-        ),
-      );
-}
-
-class FindDevicesScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: const Text("Devices"),
-        ),
-        backgroundColor: Theme.of(context).backgroundColor,
-        body: Column(
-          children: <Widget>[
-            // Connected Devices
-            StreamBuilder<List<BluetoothDevice>>(
-              stream:
-                  Stream<void>.periodic(const Duration(seconds: 2)).asyncMap(
-                (void _) => FlutterBlue.instance.connectedDevices,
-              ),
-              initialData: const [],
-              builder: (_, snapshot) => Column(
-                children: snapshot.data
-                    .map((device) => ConnectedDeviceTile(device: device))
-                    .toList(),
-              ),
-            ),
-            // Scan results
-          ],
         ),
       );
 }

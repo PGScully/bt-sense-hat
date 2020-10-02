@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
 import 'package:bt_sense_hat/bluetooth_off_screen.dart';
-import 'package:bt_sense_hat/find_devices_screen.dart';
+import 'package:bt_sense_hat/ui_scan/find_devices_screen.dart';
 
 void main() {
   runApp(BtSenseHatApp());
