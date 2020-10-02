@@ -22,6 +22,7 @@ SOFTWARE.
 import dbus
 import dbus.service
 
+from service import InvalidArgsException
 from bletools import BleTools
 
 BLUEZ_SERVICE_NAME = "org.bluez"
