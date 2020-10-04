@@ -8,5 +8,10 @@ class DeviceScreen extends StatelessWidget {
     this.device,
   }) : super(key: key);
   @override
-  Widget build(BuildContext context) => Container();
+  Widget build(BuildContext context) => Center(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(device.toString()),
+        ),
+      );
 }
