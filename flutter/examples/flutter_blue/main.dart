@@ -8,7 +8,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
-import 'file:///C:/Users/peter/Projects/cputemp/flutter/examples/flutter_blue/widgets.dart';
+import 'widgets.dart';
 
 void main() {
   runApp(FlutterBlueApp());
