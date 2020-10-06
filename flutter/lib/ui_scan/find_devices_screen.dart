@@ -23,8 +23,13 @@ class FindDevicesScreen extends StatelessWidget {
               );
             } else {
               return FloatingActionButton(
-                onPressed: () => FlutterBlue.instance
-                    .startScan(timeout: const Duration(seconds: 4)),
+                onPressed: () => FlutterBlue.instance.startScan(
+                  withServices: [
+                    // Environment Senror Service
+                    Guid('0000181A-0000-1000-8000-00805F9B34FB'),
+                  ],
+                  timeout: const Duration(seconds: 4),
+                ),
                 child: const Icon(Icons.search),
               );
             }
@@ -69,11 +74,8 @@ class ScanResults extends StatelessWidget {
         stream: FlutterBlue.instance.scanResults,
         initialData: const [],
         builder: (_, snapshot) => Column(
-          children: snapshot.data
-              .where(
-                  (element) => element.device.name == "Sense Hat Environment")
-              .map((r) => ScanResultTile(result: r))
-              .toList(),
+          children:
+              snapshot.data.map((r) => ScanResultTile(result: r)).toList(),
         ),
       );
 }
