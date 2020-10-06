@@ -69,8 +69,11 @@ class ScanResults extends StatelessWidget {
         stream: FlutterBlue.instance.scanResults,
         initialData: const [],
         builder: (_, snapshot) => Column(
-          children:
-              snapshot.data.map((r) => ScanResultTile(result: r)).toList(),
+          children: snapshot.data
+              .where(
+                  (element) => element.device.name == "Sense Hat Environment")
+              .map((r) => ScanResultTile(result: r))
+              .toList(),
         ),
       );
 }
