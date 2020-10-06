@@ -1,14 +1,18 @@
 # Bluetooth UUIDS
 
-## Current Use
+This project uses the assigned Environmental Sensing numbers.
 
-Not standard/assigned numbers, and should be replaced.
+Currently implemented are:
 
-- Sensor Service    : 00000001-710e-4a5b-8d75-3e5b444bc3cf
-- Temperature       : 00000002-710e-4a5b-8d75-3e5b444bc3cf
-- Temperature Units : 00000003-710e-4a5b-8d75-3e5b444bc3cf
-- Humidity          : 00000004-710e-4a5b-8d75-3e5b444bc3cf
-- Pressure          : 00000005-710e-4a5b-8d75-3e5b444bc3cf
+Service: 
+0x181A Environmental Sensing
+
+Characteristics:
+0x2A6E Temperature
+0x2A6F Humidity
+0x2A6D Pressure
+
+In future, units and update intervals may be implemented.
 
 ## Standard UUIDs
 
@@ -20,11 +24,10 @@ GATT Service 0x181A Environmental Sensing
 
 ### Characteristics
 
-GATT Characteristic and Object Type 0x2A21 Measurement Interval
-
 GATT Characteristic and Object Type 0x2A6E Temperature
 GATT Characteristic and Object Type 0x2A1C Temperature Measurement
 GATT Characteristic and Object Type 0x2A1D Temperature Type
+GATT Characteristic and Object Type 0x2A21 Measurement Interval
 GATT Characteristic and Object Type 0x2A1E Intermediate Temperature
 
 GATT Characteristic and Object Type 0x2A6F Humidity
