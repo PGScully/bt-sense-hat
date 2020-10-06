@@ -65,7 +65,7 @@ class TemperatureCharacteristic(Characteristic):
 
         temperature = sense.temperature
         # ! Multiply bo 100 for two decimal digits of accuracy.
-        for byte in int(temperature * 100).to_bytes(2, byteorder='little', signed=True):
+        for byte in int(temperature * 100).to_bytes(length=2, byteorder='little', signed=True):
             value.append(dbus.Byte(byte))
 
         return value
@@ -132,7 +132,7 @@ class HumidityCharacteristic(Characteristic):
 
         humidity = sense.humidity
         # ! Multiply by 100 for two decimal digits of accuracy.
-        for byte in int(humidity * 100).to_bytes(2, byteorder='little', signed=False):
+        for byte in int(humidity * 100).to_bytes(length=2, byteorder='little', signed=False):
             value.append(dbus.Byte(byte))
 
         return value
@@ -200,7 +200,7 @@ class PressureCharacteristic(Characteristic):
         pressure = sense.pressure
         # ! Multiply by 10 to for one decimal digit of accuracy.
         # ! Multiply by 100 to convert from hPa to Pa.
-        for byte in int(pressure * 10 * 100).to_bytes(4, byteorder='little', signed=False):
+        for byte in int(pressure * 10 * 100).to_bytes(length=4, byteorder='little', signed=False):
             value.append(dbus.Byte(byte))
 
         return value
@@ -258,6 +258,7 @@ app.add_service(SensorsService(0))
 app.register()
 
 adv = SensorsAdvertisement(0)
+adv.add_service_uuid(uuid="181A")
 adv.register()
 
 try:
