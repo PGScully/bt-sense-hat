@@ -38,7 +38,7 @@ class FindDevicesScreen extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(
             children: const <Widget>[
-              // ConnectedDevices(),
+              ConnectedDevices(),
               ScanResults(),
             ],
           ),
