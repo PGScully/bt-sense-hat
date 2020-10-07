@@ -6,6 +6,8 @@ import 'package:bt_sense_hat/ui_scan/connected_device_tile.dart';
 import 'package:bt_sense_hat/ui_scan/scan_result_tile.dart';
 
 class FindDevicesScreen extends StatelessWidget {
+  // TODO: Automatically start the first scan on startup
+
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(

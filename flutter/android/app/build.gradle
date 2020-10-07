@@ -37,7 +37,6 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "peterscully.name.bt_sense_hat"
         minSdkVersion 19
         targetSdkVersion 29

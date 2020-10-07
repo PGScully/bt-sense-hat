@@ -16,6 +16,7 @@ class ScanResultTile extends StatelessWidget {
         onTap: () => Navigator.of(context).push<dynamic>(
           MaterialPageRoute<dynamic>(
             builder: (context) {
+              // TODO: Why does this take forever to connect?
               result.device
                   .connect()
                   .then<void>((_) => debugPrint('Device.connect finished.'));
@@ -25,6 +26,7 @@ class ScanResultTile extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
+          // TODO: Make it look good - see connected device tile.
           child: Text(result.toString()),
         ),
       );

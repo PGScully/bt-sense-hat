@@ -24,10 +24,12 @@ class DeviceScreen extends StatelessWidget {
             switch (snapshot.data) {
               case BluetoothDeviceState.disconnected:
                 {
+                  // TODO: Why does this display instead of Connecting?
                   return const Center(child: Text('Disconnected'));
                 }
               case BluetoothDeviceState.connecting:
                 {
+                  // TODO: Loading indicator/spinner/...
                   return const Center(child: Text('Connecting'));
                 }
               case BluetoothDeviceState.connected:
@@ -76,6 +78,7 @@ class DeviceReadings extends StatelessWidget {
                     }).toList())
                 .expand((element) => element)
                 .toList(),
+            // TODO: Disconnect button
           ),
         ),
       );
