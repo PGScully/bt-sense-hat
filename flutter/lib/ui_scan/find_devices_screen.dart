@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
+import 'package:bt_sense_hat/bluetooth_constants.dart';
 import 'package:bt_sense_hat/ui_scan/connected_device_tile.dart';
 import 'package:bt_sense_hat/ui_scan/scan_result_tile.dart';
 
@@ -25,8 +26,7 @@ class FindDevicesScreen extends StatelessWidget {
               return FloatingActionButton(
                 onPressed: () => FlutterBlue.instance.startScan(
                   withServices: [
-                    // Environment Senror Service
-                    Guid('0000181A-0000-1000-8000-00805F9B34FB'),
+                    environmentSensorService,
                   ],
                   timeout: const Duration(seconds: 4),
                 ),

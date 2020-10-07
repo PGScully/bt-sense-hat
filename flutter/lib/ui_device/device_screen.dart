@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
+import 'package:bt_sense_hat/bluetooth_constants.dart';
+import 'package:bt_sense_hat/ui_device/characteristic_tile.dart';
+
 class DeviceScreen extends StatelessWidget {
   final BluetoothDevice device;
 
@@ -58,10 +61,11 @@ class DeviceReadings extends StatelessWidget {
         builder: (_, snapshot) => SingleChildScrollView(
           child: Column(
             children: snapshot.data
-                .map((s) => Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(s.toString()),
-                    ))
+                .where((s) => s.uuid == environmentSensorService)
+                .map((s) => s.characteristics
+                    .map((c) => CharacteristicTile(characteristic: c))
+                    .toList())
+                .expand((element) => element)
                 .toList(),
           ),
         ),
