@@ -16,7 +16,9 @@ class ScanResultTile extends StatelessWidget {
         onTap: () => Navigator.of(context).push<dynamic>(
           MaterialPageRoute<dynamic>(
             builder: (context) {
-              result.device.connect();
+              result.device
+                  .connect()
+                  .then<void>((_) => debugPrint('Device.connect finished.'));
               return DeviceScreen(device: result.device);
             },
           ),

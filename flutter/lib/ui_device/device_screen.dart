@@ -62,9 +62,18 @@ class DeviceReadings extends StatelessWidget {
           child: Column(
             children: snapshot.data
                 .where((s) => s.uuid == environmentSensorService)
-                .map((s) => s.characteristics
-                    .map((c) => CharacteristicTile(characteristic: c))
-                    .toList())
+                .map((s) => s.characteristics.map((c) {
+                      if (!c.isNotifying) {
+                        c.setNotifyValue(true).then<bool>((bool v) {
+                          debugPrint('Notify on ${c.uuid} set to $v');
+                          return v;
+                        }).catchError((dynamic err) {
+                          debugPrint('Error setting notify on ${c.uuid}');
+                          debugPrint('err = $err');
+                        });
+                      }
+                      return CharacteristicTile(characteristic: c);
+                    }).toList())
                 .expand((element) => element)
                 .toList(),
           ),
