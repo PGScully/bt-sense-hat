@@ -62,23 +62,43 @@ class DeviceReadings extends StatelessWidget {
         initialData: const [],
         builder: (_, snapshot) => SingleChildScrollView(
           child: Column(
-            children: snapshot.data
-                .where((s) => s.uuid == environmentSensorService)
-                .map((s) => s.characteristics.map((c) {
-                      if (!c.isNotifying) {
-                        c.setNotifyValue(true).then<bool>((bool v) {
-                          debugPrint('Notify on ${c.uuid} set to $v');
-                          return v;
-                        }).catchError((dynamic err) {
-                          debugPrint('Error setting notify on ${c.uuid}');
-                          debugPrint('err = $err');
-                        });
-                      }
-                      return CharacteristicTile(characteristic: c);
-                    }).toList())
-                .expand((element) => element)
-                .toList(),
-            // TODO: Disconnect button
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ...snapshot.data
+                  .where((s) => s.uuid == environmentSensorService)
+                  .map((s) => s.characteristics.map((c) {
+                        // FIXME: I don't think I can have multiple setNotifyValue
+                        // in parallel.  Need to sequentialize them.
+                        if (!c.isNotifying) {
+                          final val =
+                              c.setNotifyValue(true).then<bool>((bool v) {
+                            debugPrint('Notify on ${c.uuid} set to $v');
+                            return v;
+                          }).catchError((dynamic err) {
+                            debugPrint('Error setting notify on ${c.uuid}');
+                            debugPrint('err = $err');
+                            return false;
+                          });
+                          debugPrint('val = $val');
+                        }
+                        return CharacteristicTile(characteristic: c);
+                      }).toList())
+                  .expand((element) => element)
+                  .toList(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  MaterialButton(
+                    onPressed: () {
+                      device.disconnect();
+                      Navigator.of(context).pop();
+                    },
+                    color: Theme.of(context).buttonTheme.colorScheme.background,
+                    child: const Text('DISCONNECT'),
+                  ),
+                ],
+              )
+            ],
           ),
         ),
       );
