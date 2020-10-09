@@ -40,21 +40,21 @@ class CharacteristicTile extends StatelessWidget {
               if (characteristic.uuid == temperatureCharacteristic) {
                 final t = temperatureFromData(snapshot.data);
                 return Text(
-                  '$t',
+                  t.toStringAsFixed(1),
                   style: Theme.of(context).textTheme.headline3,
                   textAlign: TextAlign.right,
                 );
               } else if (characteristic.uuid == humidityCharacteristic) {
                 final h = humidityFromData(snapshot.data);
                 return Text(
-                  '$h',
+                  h.toStringAsFixed(1),
                   style: Theme.of(context).textTheme.headline3,
                   textAlign: TextAlign.right,
                 );
               } else if (characteristic.uuid == pressureCharacteristic) {
                 final p = pressureFromData(snapshot.data);
                 return Text(
-                  '$p',
+                  p.toStringAsFixed(1),
                   style: Theme.of(context).textTheme.headline3,
                   textAlign: TextAlign.right,
                 );
@@ -95,7 +95,7 @@ class CharacteristicTile extends StatelessWidget {
     } else {
       return ByteData.view(Int8List.fromList(data).buffer)
               .getInt16(0, Endian.little) /
-          100;
+          100.0;
     }
   }
 
@@ -106,7 +106,7 @@ class CharacteristicTile extends StatelessWidget {
     } else {
       return ByteData.view(Int8List.fromList(data).buffer)
               .getUint16(0, Endian.little) /
-          100;
+          100.0;
     }
   }
 
@@ -117,7 +117,7 @@ class CharacteristicTile extends StatelessWidget {
     } else {
       return ByteData.view(Int8List.fromList(data).buffer)
               .getUint32(0, Endian.little) /
-          1000;
+          1000.0;
     }
   }
 }
