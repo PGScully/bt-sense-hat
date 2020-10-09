@@ -20,11 +20,12 @@ class ConnectedDeviceTile extends StatelessWidget {
           initialData: BluetoothDeviceState.disconnected,
           builder: (c, snapshot) {
             if (snapshot.data == BluetoothDeviceState.connected) {
-              return RaisedButton(
+              return MaterialButton(
                 onPressed: () => Navigator.of(context).push<dynamic>(
                   MaterialPageRoute<dynamic>(
                       builder: (context) => DeviceScreen(device: device)),
                 ),
+                color: Theme.of(context).buttonTheme.colorScheme.background,
                 child: const Text('OPEN'),
               );
             }

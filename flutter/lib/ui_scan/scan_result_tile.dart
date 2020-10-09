@@ -15,7 +15,7 @@ class ScanResultTile extends StatelessWidget {
   Widget build(BuildContext context) => ListTile(
         title: Text(result.device.name),
         subtitle: Text(result.device.id.toString()),
-        trailing: RaisedButton(
+        trailing: MaterialButton(
           onPressed: () {
             debugPrint('Device.connect started.');
             result.device
@@ -26,6 +26,7 @@ class ScanResultTile extends StatelessWidget {
                   builder: (context) => DeviceScreen(device: result.device)),
             );
           },
+          color: Theme.of(context).buttonTheme.colorScheme.background,
           child: const Text('CONNECT'),
         ),
       );
