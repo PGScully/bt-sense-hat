@@ -65,7 +65,7 @@ class CharacteristicTile extends StatelessWidget {
           trailing: Builder(builder: (context) {
             if (characteristic.uuid == temperatureCharacteristic) {
               return Text(
-                'C',
+                '℃',
                 style: Theme.of(context).textTheme.bodyText1,
                 textAlign: TextAlign.left,
               );
