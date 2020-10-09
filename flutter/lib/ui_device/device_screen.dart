@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:synchronized/synchronized.dart';
 
 import 'package:bt_sense_hat/bluetooth_constants.dart';
+import 'package:bt_sense_hat/device_constants.dart';
 import 'package:bt_sense_hat/ui_device/characteristic_tile.dart';
 
 class DeviceScreen extends StatelessWidget {
@@ -52,7 +52,6 @@ class DeviceScreen extends StatelessWidget {
 
 class DeviceReadings extends StatelessWidget {
   final BluetoothDevice device;
-  final _lock = Lock();
 
   DeviceReadings({
     Key key,
@@ -61,7 +60,7 @@ class DeviceReadings extends StatelessWidget {
 
   Future<void> startNotifying(BluetoothCharacteristic c) async {
     if (!c.isNotifying) {
-      final val = await _lock.synchronized(
+      final val = await bluetoothLock.synchronized(
         () => c.setNotifyValue(true).then<bool>((bool v) {
           debugPrint('Notify on ${c.uuid} set to $v');
           return v;
@@ -107,7 +106,7 @@ class DeviceReadings extends StatelessWidget {
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       );

@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
 import 'package:bt_sense_hat/bluetooth_constants.dart';
+import 'package:bt_sense_hat/device_constants.dart';
 
 class CharacteristicTile extends StatelessWidget {
   final BluetoothCharacteristic characteristic;
@@ -19,19 +21,23 @@ class CharacteristicTile extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListTile(
-            // title: FutureBuilder<List<int>>(
-            //     future: characteristic.descriptors.first.read(),
-            //     initialData: const [],
-            //     builder: (context, snapshot) {
-            //       if (snapshot.data == null || snapshot.data.isEmpty) {
-            //         return const Text('Loading...');
-            //       } else {
-            //         return Text(
-            //             ByteData.view(Int8List.fromList(snapshot.data).buffer)
-            //                 .toString());
-            //       }
-            //     }),
-            title: Text(characteristic.uuid.toString()),
+            title: FutureBuilder<List<int>>(
+                future: bluetoothLock.synchronized(
+                    () => characteristic.descriptors.first.read()),
+                initialData: const [],
+                builder: (context, snapshot) {
+                  if (snapshot.data == null || snapshot.data.isEmpty) {
+                    return const Text('Loading...');
+                  } else {
+                    return Text(
+                      utf8.decode(snapshot.data),
+                      // String.fromCharCodes(snapshot.data),
+                      // ByteData.view(Uint8List.fromList(snapshot.data).buffer)
+                      //     .toString(),
+                    );
+                  }
+                }),
+            // title: Text(characteristic.uuid.toString()),
             subtitle: StreamBuilder<List<int>>(
               stream: characteristic.value,
               // TODO: Can I replace this with a fetch of the current reading?
