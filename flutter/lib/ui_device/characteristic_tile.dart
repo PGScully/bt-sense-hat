@@ -30,10 +30,8 @@ class CharacteristicTile extends StatelessWidget {
                     return const Text('Loading...');
                   } else {
                     return Text(
-                      utf8.decode(snapshot.data),
-                      // String.fromCharCodes(snapshot.data),
-                      // ByteData.view(Uint8List.fromList(snapshot.data).buffer)
-                      //     .toString(),
+                      // utf8.decode(snapshot.data),
+                      String.fromCharCodes(snapshot.data),
                     );
                   }
                 }),
