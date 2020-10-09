@@ -12,22 +12,21 @@ class ScanResultTile extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => GestureDetector(
-        onTap: () => Navigator.of(context).push<dynamic>(
-          MaterialPageRoute<dynamic>(
-            builder: (context) {
-              // TODO: Why does this take forever to connect?
-              result.device
-                  .connect()
-                  .then<void>((_) => debugPrint('Device.connect finished.'));
-              return DeviceScreen(device: result.device);
-            },
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          // TODO: Make it look good - see connected device tile.
-          child: Text(result.toString()),
+  Widget build(BuildContext context) => ListTile(
+        title: Text(result.device.name),
+        subtitle: Text(result.device.id.toString()),
+        trailing: RaisedButton(
+          onPressed: () {
+            debugPrint('Device.connect started.');
+            result.device
+                .connect()
+                .then<void>((_) => debugPrint('Device.connect finished.'));
+            Navigator.of(context).push<dynamic>(
+              MaterialPageRoute<dynamic>(
+                  builder: (context) => DeviceScreen(device: result.device)),
+            );
+          },
+          child: const Text('CONNECT'),
         ),
       );
 }

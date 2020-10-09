@@ -39,9 +39,22 @@ class FindDevicesScreen extends StatelessWidget {
         ),
         body: SingleChildScrollView(
           child: Column(
-            children: const <Widget>[
-              ConnectedDevices(),
-              ScanResults(),
+            children: <Widget>[
+              ListTile(
+                  title: Text(
+                'Connected Devices',
+                style: Theme.of(context).textTheme.headline5,
+                textAlign: TextAlign.center,
+              )),
+              // style: title,
+              const ConnectedDevices(),
+              ListTile(
+                  title: Text(
+                "Scan Results",
+                style: Theme.of(context).textTheme.headline5,
+                textAlign: TextAlign.center,
+              )),
+              const ScanResults(),
             ],
           ),
         ),

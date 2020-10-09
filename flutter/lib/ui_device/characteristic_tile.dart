@@ -18,9 +18,14 @@ class CharacteristicTile extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
+            // TODO: Title
+            // FutureBuilder on characteristic.descritors.first.read()
+            // ? with uuid as initial value?
             Text(characteristic.uuid.toString()),
             StreamBuilder<List<int>>(
               stream: characteristic.value,
+              // TODO: Can I replace this with a fetch of the current reading?
+              // ? characteristic.lastValue ?
               initialData: const [],
               builder: (context, snapshot) {
                 final data = Int8List.fromList(snapshot.data.toList());
@@ -31,7 +36,7 @@ class CharacteristicTile extends StatelessWidget {
                             100;
                     return Text('${t}C');
                   } else {
-                    debugPrint('data = $data');
+                    // debugPrint('data = $data');
                     return Text('data: ${data.toString()}');
                   }
                 } else if (characteristic.uuid == humidityCharacteristic) {
@@ -41,7 +46,7 @@ class CharacteristicTile extends StatelessWidget {
                             100;
                     return Text('$h%');
                   } else {
-                    debugPrint('data = $data');
+                    // debugPrint('data = $data');
                     return Text('data: ${data.toString()}');
                   }
                 } else if (characteristic.uuid == pressureCharacteristic) {
@@ -51,7 +56,7 @@ class CharacteristicTile extends StatelessWidget {
                             1000;
                     return Text('$p hPa');
                   } else {
-                    debugPrint('data = $data');
+                    // debugPrint('data = $data');
                     return Text('data: ${data.toString()}');
                   }
                 }
