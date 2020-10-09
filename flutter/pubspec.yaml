@@ -9,6 +9,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_blue: ^0.7.2
+  synchronized: ^2.2.0+2
 
   cupertino_icons: ^1.0.0
 

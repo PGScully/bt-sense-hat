@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:synchronized/synchronized.dart';
 
 import 'package:bt_sense_hat/bluetooth_constants.dart';
 import 'package:bt_sense_hat/ui_device/characteristic_tile.dart';
@@ -17,6 +18,7 @@ class DeviceScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Sense Hat'),
         ),
+        backgroundColor: Theme.of(context).backgroundColor,
         body: StreamBuilder<BluetoothDeviceState>(
           stream: device.state,
           initialData: BluetoothDeviceState.connecting,
@@ -50,56 +52,63 @@ class DeviceScreen extends StatelessWidget {
 
 class DeviceReadings extends StatelessWidget {
   final BluetoothDevice device;
+  final _lock = Lock();
 
-  const DeviceReadings({
+  DeviceReadings({
     Key key,
     this.device,
   }) : super(key: key);
+
+  Future<void> startNotifying(BluetoothCharacteristic c) async {
+    if (!c.isNotifying) {
+      final val = await _lock.synchronized(
+        () => c.setNotifyValue(true).then<bool>((bool v) {
+          debugPrint('Notify on ${c.uuid} set to $v');
+          return v;
+        }).catchError((dynamic err) {
+          debugPrint('Error setting notify on ${c.uuid}');
+          debugPrint('err = $err');
+          return false;
+        }),
+      );
+      debugPrint('val = $val');
+    }
+  }
 
   @override
   Widget build(BuildContext context) => StreamBuilder<List<BluetoothService>>(
         stream: device.services,
         initialData: const [],
-        builder: (_, snapshot) => SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ...snapshot.data
-                  .where((s) => s.uuid == environmentSensorService)
-                  .map((s) => s.characteristics.map((c) {
-                        // FIXME: I don't think I can have multiple setNotifyValue
-                        // in parallel.  Need to sequentialize them.
-                        if (!c.isNotifying) {
-                          final val =
-                              c.setNotifyValue(true).then<bool>((bool v) {
-                            debugPrint('Notify on ${c.uuid} set to $v');
-                            return v;
-                          }).catchError((dynamic err) {
-                            debugPrint('Error setting notify on ${c.uuid}');
-                            debugPrint('err = $err');
-                            return false;
-                          });
-                          debugPrint('val = $val');
-                        }
-                        return CharacteristicTile(characteristic: c);
-                      }).toList())
-                  .expand((element) => element)
-                  .toList(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  MaterialButton(
-                    onPressed: () {
-                      device.disconnect();
-                      Navigator.of(context).pop();
-                    },
-                    color: Theme.of(context).buttonTheme.colorScheme.background,
-                    child: const Text('DISCONNECT'),
-                  ),
-                ],
-              )
-            ],
-          ),
+        builder: (_, snapshot) => Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ...snapshot.data
+                .where((s) => s.uuid == environmentSensorService)
+                .map((s) => s.characteristics.map((c) {
+                      startNotifying(c);
+                      return CharacteristicTile(characteristic: c);
+                    }).toList())
+                .expand((element) => element)
+                .toList(),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    MaterialButton(
+                      onPressed: () {
+                        device.disconnect();
+                        Navigator.of(context).pop();
+                      },
+                      color: Theme.of(context).buttonTheme.colorScheme.primary,
+                      child: const Text('DISCONNECT'),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
         ),
       );
 }

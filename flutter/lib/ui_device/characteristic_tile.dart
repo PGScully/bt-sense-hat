@@ -14,77 +14,80 @@ class CharacteristicTile extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListTile(
-          title: FutureBuilder<List<int>>(
-              future: characteristic.descriptors.first.read(),
+  Widget build(BuildContext context) => Expanded(
+        flex: 3,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListTile(
+            // title: FutureBuilder<List<int>>(
+            //     future: characteristic.descriptors.first.read(),
+            //     initialData: const [],
+            //     builder: (context, snapshot) {
+            //       if (snapshot.data == null || snapshot.data.isEmpty) {
+            //         return const Text('Loading...');
+            //       } else {
+            //         return Text(
+            //             ByteData.view(Int8List.fromList(snapshot.data).buffer)
+            //                 .toString());
+            //       }
+            //     }),
+            title: Text(characteristic.uuid.toString()),
+            subtitle: StreamBuilder<List<int>>(
+              stream: characteristic.value,
+              // TODO: Can I replace this with a fetch of the current reading?
+              // ? characteristic.lastValue ?
               initialData: const [],
+              // initialData: characteristic.lastValue,
               builder: (context, snapshot) {
-                if (snapshot.data == null || snapshot.data.isEmpty) {
-                  return const Text('Loading...');
-                } else {
+                if (characteristic.uuid == temperatureCharacteristic) {
+                  final t = temperatureFromData(snapshot.data);
                   return Text(
-                      ByteData.view(Int8List.fromList(snapshot.data).buffer)
-                          .toString());
+                    t.toStringAsFixed(1),
+                    style: Theme.of(context).textTheme.headline2,
+                    textAlign: TextAlign.right,
+                  );
+                } else if (characteristic.uuid == humidityCharacteristic) {
+                  final h = humidityFromData(snapshot.data);
+                  return Text(
+                    h.toStringAsFixed(1),
+                    style: Theme.of(context).textTheme.headline2,
+                    textAlign: TextAlign.right,
+                  );
+                } else if (characteristic.uuid == pressureCharacteristic) {
+                  final p = pressureFromData(snapshot.data);
+                  return Text(
+                    p.toStringAsFixed(1),
+                    style: Theme.of(context).textTheme.headline2,
+                    textAlign: TextAlign.right,
+                  );
                 }
-              }),
-          // subtitle: Text(characteristic.uuid.toString()),
-          subtitle: StreamBuilder<List<int>>(
-            stream: characteristic.value,
-            // TODO: Can I replace this with a fetch of the current reading?
-            // ? characteristic.lastValue ?
-            initialData: const [],
-            // initialData: characteristic.lastValue,
-            builder: (context, snapshot) {
+                return Text('Unknown characteristic: ${characteristic.uuid}');
+              },
+            ),
+            trailing: Builder(builder: (context) {
               if (characteristic.uuid == temperatureCharacteristic) {
-                final t = temperatureFromData(snapshot.data);
                 return Text(
-                  t.toStringAsFixed(1),
-                  style: Theme.of(context).textTheme.headline3,
-                  textAlign: TextAlign.right,
+                  '℃',
+                  style: Theme.of(context).textTheme.bodyText1,
+                  textAlign: TextAlign.left,
                 );
               } else if (characteristic.uuid == humidityCharacteristic) {
-                final h = humidityFromData(snapshot.data);
                 return Text(
-                  h.toStringAsFixed(1),
-                  style: Theme.of(context).textTheme.headline3,
-                  textAlign: TextAlign.right,
+                  '%',
+                  style: Theme.of(context).textTheme.bodyText1,
+                  textAlign: TextAlign.left,
                 );
               } else if (characteristic.uuid == pressureCharacteristic) {
-                final p = pressureFromData(snapshot.data);
                 return Text(
-                  p.toStringAsFixed(1),
-                  style: Theme.of(context).textTheme.headline3,
-                  textAlign: TextAlign.right,
+                  'hPa',
+                  style: Theme.of(context).textTheme.bodyText1,
+                  textAlign: TextAlign.left,
                 );
+              } else {
+                return const Text('?');
               }
-              return Text('Unknown characteristic: ${characteristic.uuid}');
-            },
+            }),
           ),
-          trailing: Builder(builder: (context) {
-            if (characteristic.uuid == temperatureCharacteristic) {
-              return Text(
-                '℃',
-                style: Theme.of(context).textTheme.bodyText1,
-                textAlign: TextAlign.left,
-              );
-            } else if (characteristic.uuid == humidityCharacteristic) {
-              return Text(
-                '%',
-                style: Theme.of(context).textTheme.bodyText1,
-                textAlign: TextAlign.left,
-              );
-            } else if (characteristic.uuid == pressureCharacteristic) {
-              return Text(
-                'hPa',
-                style: Theme.of(context).textTheme.bodyText1,
-                textAlign: TextAlign.left,
-              );
-            } else {
-              return const Text('?');
-            }
-          }),
         ),
       );
 

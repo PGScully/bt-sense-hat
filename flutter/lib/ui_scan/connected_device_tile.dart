@@ -23,9 +23,10 @@ class ConnectedDeviceTile extends StatelessWidget {
               return MaterialButton(
                 onPressed: () => Navigator.of(context).push<dynamic>(
                   MaterialPageRoute<dynamic>(
-                      builder: (context) => DeviceScreen(device: device)),
+                    builder: (context) => DeviceScreen(device: device),
+                  ),
                 ),
-                color: Theme.of(context).buttonTheme.colorScheme.background,
+                color: Theme.of(context).buttonTheme.colorScheme.primary,
                 child: const Text('OPEN'),
               );
             }

@@ -23,10 +23,11 @@ class ScanResultTile extends StatelessWidget {
                 .then<void>((_) => debugPrint('Device.connect finished.'));
             Navigator.of(context).push<dynamic>(
               MaterialPageRoute<dynamic>(
-                  builder: (context) => DeviceScreen(device: result.device)),
+                builder: (context) => DeviceScreen(device: result.device),
+              ),
             );
           },
-          color: Theme.of(context).buttonTheme.colorScheme.background,
+          color: Theme.of(context).buttonTheme.colorScheme.primary,
           child: const Text('CONNECT'),
         ),
       );
