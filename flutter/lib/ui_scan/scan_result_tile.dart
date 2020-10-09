@@ -19,7 +19,7 @@ class ScanResultTile extends StatelessWidget {
           onPressed: () {
             debugPrint('Device.connect started.');
             result.device
-                .connect()
+                .connect(autoConnect: false)
                 .then<void>((_) => debugPrint('Device.connect finished.'));
             Navigator.of(context).push<dynamic>(
               MaterialPageRoute<dynamic>(
