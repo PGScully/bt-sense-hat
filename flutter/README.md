@@ -14,3 +14,24 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+## TODO
+
+The following remain to be done:
+
+### Bluetooth
+
+Fixes:
+[ ] Get sensor names from characteristic descriptors
+
+Further coding and experimantation:
+[ ] Put sensor values in the advertisement
+[?] More?
+
+### Display
+
+[ ] Relayout sensor display
+[ ] Landscape layout
+[ ] Sensor text and background colours for both light and dark modes
+[ ] Transition animations for scan -> device screens
+[?] More?
