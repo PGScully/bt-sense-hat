@@ -21,6 +21,9 @@ The following remain to be done:
 
 ### Display
 
+[ ] App icon
+[ ] Initial sensor scan on app open - maybe?
+[ ] Text messages in scan screen for empty lists
 [ ] Relayout sensor display
 [ ] Landscape layout
 [ ] Sensor text and background colours for both light and dark modes
