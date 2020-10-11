@@ -21,6 +21,7 @@ The following remain to be done:
 
 ### Display
 
+[ ] Gracefully handle conection loss and reconnection
 [ ] App icon
 [ ] Initial sensor scan on app open - maybe?
 [ ] Text messages in scan screen for empty lists
