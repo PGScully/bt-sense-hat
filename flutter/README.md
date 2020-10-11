@@ -19,15 +19,6 @@ samples, guidance on mobile development, and a full API reference.
 
 The following remain to be done:
 
-### Bluetooth
-
-Fixes:
-[ ] Get sensor names from characteristic descriptors
-
-Further coding and experimantation:
-[ ] Put sensor values in the advertisement
-[?] More?
-
 ### Display
 
 [ ] Relayout sensor display
