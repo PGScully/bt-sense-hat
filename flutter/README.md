@@ -23,10 +23,11 @@ The following remain to be done:
 
 [ ] Gracefully handle conection loss and reconnection
 [ ] App icon
-[ ] Initial sensor scan on app open - maybe?
+[ ] Initial sensor scan on app open
 [ ] Text messages in scan screen for empty lists
 [ ] Relayout sensor display
 [ ] Landscape layout
 [ ] Sensor text and background colours for both light and dark modes
 [ ] Transition animations for scan -> device screens
+[ ] Better navigation code
 [?] More?
