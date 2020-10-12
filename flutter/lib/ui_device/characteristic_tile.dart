@@ -21,6 +21,13 @@ class CharacteristicTile extends StatelessWidget {
           child: Card(
             color: colorFromGuid(guid: characteristic.uuid),
             child: ListTile(
+              // TODO: Use a FutureBuilder and filter on descriptor UUID == 2901
+              // FutureBuilder<List<int>>(future: bluetoothLock.synchronized(
+              //  () => characteristic.descriptors.first.read()),
+              //  initialData: const []
+              // if (snapshot.data == null || snapshot.data.isEmpty) {
+              // return const Text('Loading...');} else {
+              //  String.fromCharCodes(snapshot.data),
               title: Text(
                 sensorNameFromGuid(guid: characteristic.uuid),
                 style: Theme.of(context)
