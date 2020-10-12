@@ -12,13 +12,12 @@ The Raspberry Pi Bluetooth server is forked from [Douglas6/cputemp](https://gith
 
 Fixes:
 
-[ ] Get sensor names from characteristic descriptors
+ - Get sensor names from characteristic descriptors
 
 Further coding and experimantation:
 
-[ ] Put sensor values in the advertisement
-
-[ ] Reimplement the server in Go or Rust
+ - Put sensor values in the advertisement
+ - Reimplement the server in Go or Rust
 
 ### Flutter
 
