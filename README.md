@@ -18,6 +18,7 @@ My changes are to:
 Fixes:
 
 - Get sensor names from characteristic descriptors
+- Make it start at boot, e.g. a systemd service
 
 Further coding and experimantation:
 
