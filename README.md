@@ -13,18 +13,5 @@ My changes are to:
 
 ## TODO
 
-### Bluetooth / Raspberry Pi
+See the GitHub issues.
 
-Fixes:
-
-- Get sensor names from characteristic descriptors
-- Make it start at boot, e.g. a systemd service
-
-Further coding and experimantation:
-
-- Put sensor values in the advertisement
-- Reimplement the server in Go or Rust
-
-### Flutter
-
-See README.md in the flutter directory
