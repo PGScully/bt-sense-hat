@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"name": "BT Sense Hat Project",
+			"path": "."
+		},
+		{
+			"name": "Flutter Client",
+			"path": "flutter"
+		},
+		{
+			"name": "Raspberry Pi Server",
+			"path": "raspberrypi"
+		}
+	],
+	"settings": {}
+}

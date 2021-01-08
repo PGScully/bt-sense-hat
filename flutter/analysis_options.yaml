@@ -13,4 +13,5 @@ analyzer:
 
 linter:
   rules:
-    - prefer_expression_function_bodies # consider
+    prefer_expression_function_bodies: true
+    sort_pub_dependencies: false
