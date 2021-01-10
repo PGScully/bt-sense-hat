@@ -13,4 +13,4 @@ My changes are to:
 
 ## TODO
 
-See the GitHub issues.
+See the [GitHub issues](https://github.com/PGScully/bt-sense-hat/issues).
