@@ -2,6 +2,8 @@ name: bt_sense_hat
 description: View Sense Hat environment sensors via Bluetooth
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
+version: 0.1.0+1
+
 environment:
   sdk: ">=2.7.0 <3.0.0"
 
