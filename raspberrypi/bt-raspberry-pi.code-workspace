@@ -3,7 +3,9 @@
 		{
 			"name": "Raspberry Pi BT Server",
 			"path": "."
-		}
+		},
 	],
-	"settings": {}
+	"settings": {
+		"python.pythonPath": "bt-sense/bin/python",
+	},
 }
