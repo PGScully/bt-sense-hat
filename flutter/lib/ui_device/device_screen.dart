@@ -53,7 +53,7 @@ class DeviceScreen extends StatelessWidget {
 class DeviceReadings extends StatelessWidget {
   final BluetoothDevice device;
 
-  DeviceReadings({
+  const DeviceReadings({
     Key key,
     this.device,
   }) : super(key: key);
