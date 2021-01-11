@@ -59,6 +59,7 @@ class DeviceReadings extends StatelessWidget {
   }) : super(key: key);
 
   Future<void> startNotifying(BluetoothCharacteristic c) async {
+    debugPrint('startNotifying: uuid = ${c.uuid}, notifying = ${c.isNotifying}');
     if (!c.isNotifying) {
       final val = await bluetoothLock.synchronized(
         () => c.setNotifyValue(true).then<bool>((bool v) {
