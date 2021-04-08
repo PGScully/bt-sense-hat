@@ -9,8 +9,8 @@ class CharacteristicTile extends StatelessWidget {
   final BluetoothCharacteristic characteristic;
 
   const CharacteristicTile({
-    Key key,
-    this.characteristic,
+    Key? key,
+    required this.characteristic,
   }) : super(key: key);
 
   @override
@@ -30,10 +30,7 @@ class CharacteristicTile extends StatelessWidget {
               //  String.fromCharCodes(snapshot.data),
               title: Text(
                 sensorNameFromGuid(guid: characteristic.uuid),
-                style: Theme.of(context)
-                    .textTheme
-                    .headline4
-                    .copyWith(color: Colors.black87),
+                style: Theme.of(context).textTheme.headline4!.copyWith(color: Colors.black87),
               ),
               subtitle: StreamBuilder<List<int>>(
                 stream: characteristic.value,
@@ -43,33 +40,24 @@ class CharacteristicTile extends StatelessWidget {
                 initialData: characteristic.lastValue,
                 builder: (context, snapshot) {
                   if (characteristic.uuid == temperatureCharacteristic) {
-                    final t = temperatureFromData(snapshot.data);
+                    final t = temperatureFromData(snapshot.data!);
                     return Text(
                       t.toStringAsFixed(1),
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline2
-                          .copyWith(color: Colors.black87),
+                      style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.black87),
                       textAlign: TextAlign.right,
                     );
                   } else if (characteristic.uuid == humidityCharacteristic) {
-                    final h = humidityFromData(snapshot.data);
+                    final h = humidityFromData(snapshot.data!);
                     return Text(
                       h.toStringAsFixed(1),
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline2
-                          .copyWith(color: Colors.black87),
+                      style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.black87),
                       textAlign: TextAlign.right,
                     );
                   } else if (characteristic.uuid == pressureCharacteristic) {
-                    final p = pressureFromData(snapshot.data);
+                    final p = pressureFromData(snapshot.data!);
                     return Text(
                       p.toStringAsFixed(1),
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline2
-                          .copyWith(color: Colors.black87),
+                      style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.black87),
                       textAlign: TextAlign.right,
                     );
                   }
@@ -80,28 +68,19 @@ class CharacteristicTile extends StatelessWidget {
                 if (characteristic.uuid == temperatureCharacteristic) {
                   return Text(
                     '℃',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1
-                        .copyWith(color: Colors.black87),
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.black87),
                     textAlign: TextAlign.left,
                   );
                 } else if (characteristic.uuid == humidityCharacteristic) {
                   return Text(
                     '%',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1
-                        .copyWith(color: Colors.black87),
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.black87),
                     textAlign: TextAlign.left,
                   );
                 } else if (characteristic.uuid == pressureCharacteristic) {
                   return Text(
                     'hPa',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1
-                        .copyWith(color: Colors.black87),
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.black87),
                     textAlign: TextAlign.left,
                   );
                 } else {
@@ -118,9 +97,7 @@ class CharacteristicTile extends StatelessWidget {
       debugPrint('Temperature data.length = ${data.length}, should be 2.');
       return -999.0;
     } else {
-      return ByteData.view(Int8List.fromList(data).buffer)
-              .getInt16(0, Endian.little) /
-          100.0;
+      return ByteData.view(Int8List.fromList(data).buffer).getInt16(0, Endian.little) / 100.0;
     }
   }
 
@@ -129,9 +106,7 @@ class CharacteristicTile extends StatelessWidget {
       debugPrint('Humidity data.length = ${data.length}, should be 2.');
       return -999.0;
     } else {
-      return ByteData.view(Int8List.fromList(data).buffer)
-              .getUint16(0, Endian.little) /
-          100.0;
+      return ByteData.view(Int8List.fromList(data).buffer).getUint16(0, Endian.little) / 100.0;
     }
   }
 
@@ -140,24 +115,22 @@ class CharacteristicTile extends StatelessWidget {
       debugPrint('Pressure data.length = ${data.length}, should be 4.');
       return -999.0;
     } else {
-      return ByteData.view(Int8List.fromList(data).buffer)
-              .getUint32(0, Endian.little) /
-          1000.0;
+      return ByteData.view(Int8List.fromList(data).buffer).getUint32(0, Endian.little) / 1000.0;
     }
   }
 
-  Color colorFromGuid({Guid guid}) {
+  Color colorFromGuid({required Guid guid}) {
     if (guid == temperatureCharacteristic) {
-      return Colors.red[400];
+      return Colors.red[400]!;
     } else if (guid == humidityCharacteristic) {
-      return Colors.yellow[400];
+      return Colors.yellow[400]!;
     } else if (guid == pressureCharacteristic) {
-      return Colors.blue[400];
+      return Colors.blue[400]!;
     }
-    return Colors.grey[400];
+    return Colors.grey[400]!;
   }
 
-  String sensorNameFromGuid({Guid guid}) {
+  String sensorNameFromGuid({required Guid guid}) {
     if (guid == temperatureCharacteristic) {
       return 'Temperature';
     } else if (guid == humidityCharacteristic) {

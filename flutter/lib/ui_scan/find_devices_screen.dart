@@ -18,7 +18,7 @@ class FindDevicesScreen extends StatelessWidget {
           stream: FlutterBlue.instance.isScanning,
           initialData: false,
           builder: (_, snapshot) {
-            if (snapshot.data) {
+            if (snapshot.data!) {
               return FloatingActionButton(
                 onPressed: () => FlutterBlue.instance.stopScan(),
                 backgroundColor: Colors.red,
@@ -63,7 +63,7 @@ class FindDevicesScreen extends StatelessWidget {
 
 class ConnectedDevices extends StatelessWidget {
   const ConnectedDevices({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -72,7 +72,7 @@ class ConnectedDevices extends StatelessWidget {
             .asyncMap((_) => FlutterBlue.instance.connectedDevices),
         initialData: const [],
         builder: (_, snapshot) => Column(
-          children: snapshot.data
+          children: snapshot.data!
               .map((device) => ConnectedDeviceTile(device: device))
               .toList(),
         ),
@@ -81,7 +81,7 @@ class ConnectedDevices extends StatelessWidget {
 
 class ScanResults extends StatelessWidget {
   const ScanResults({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -90,7 +90,7 @@ class ScanResults extends StatelessWidget {
         initialData: const [],
         builder: (_, snapshot) => Column(
           children:
-              snapshot.data.map((r) => ScanResultTile(result: r)).toList(),
+              snapshot.data!.map((r) => ScanResultTile(result: r)).toList(),
         ),
       );
 }

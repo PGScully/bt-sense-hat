@@ -7,8 +7,8 @@ class ConnectedDeviceTile extends StatelessWidget {
   final BluetoothDevice device;
 
   const ConnectedDeviceTile({
-    Key key,
-    this.device,
+    Key? key,
+    required this.device,
   }) : super(key: key);
 
   @override
@@ -26,7 +26,7 @@ class ConnectedDeviceTile extends StatelessWidget {
                     builder: (context) => DeviceScreen(device: device),
                   ),
                 ),
-                color: Theme.of(context).buttonTheme.colorScheme.primary,
+                color: Theme.of(context).colorScheme.primary,
                 child: const Text('OPEN'),
               );
             }

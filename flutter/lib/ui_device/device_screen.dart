@@ -9,8 +9,8 @@ class DeviceScreen extends StatelessWidget {
   final BluetoothDevice device;
 
   const DeviceScreen({
-    Key key,
-    this.device,
+    Key? key,
+    required this.device,
   }) : super(key: key);
 
   @override
@@ -43,8 +43,11 @@ class DeviceScreen extends StatelessWidget {
                 {
                   return const Center(child: Text('Disconnecting'));
                 }
+              case null:
+                {
+                  return const Text('Unknown State!');
+                }
             }
-            return const Text('Unknown State!');
           },
         ),
       );
@@ -54,8 +57,8 @@ class DeviceReadings extends StatelessWidget {
   final BluetoothDevice device;
 
   const DeviceReadings({
-    Key key,
-    this.device,
+    Key? key,
+    required this.device,
   }) : super(key: key);
 
   Future<void> startNotifying(BluetoothCharacteristic c) async {
@@ -82,7 +85,7 @@ class DeviceReadings extends StatelessWidget {
         builder: (_, snapshot) => Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ...snapshot.data
+            ...snapshot.data!
                 .where((s) => s.uuid == environmentSensorService)
                 .map((s) => s.characteristics.map((c) {
                       startNotifying(c);
@@ -101,7 +104,7 @@ class DeviceReadings extends StatelessWidget {
                         device.disconnect();
                         Navigator.of(context).pop();
                       },
-                      color: Theme.of(context).buttonTheme.colorScheme.primary,
+                      color: Theme.of(context).colorScheme.primary,
                       child: const Text('DISCONNECT'),
                     ),
                   ],

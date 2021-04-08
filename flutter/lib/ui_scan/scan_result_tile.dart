@@ -7,8 +7,8 @@ class ScanResultTile extends StatelessWidget {
   final ScanResult result;
 
   const ScanResultTile({
-    Key key,
-    this.result,
+    Key? key,
+    required this.result,
   }) : super(key: key);
 
   @override
@@ -27,7 +27,7 @@ class ScanResultTile extends StatelessWidget {
               ),
             );
           },
-          color: Theme.of(context).buttonTheme.colorScheme.primary,
+          color: Theme.of(context).colorScheme.primary,
           child: const Text('CONNECT'),
         ),
       );
