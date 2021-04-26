@@ -64,7 +64,7 @@ class TemperatureCharacteristic(Characteristic):
         value = []
 
         temperature = sense.temperature
-        # ! Multiply bo 100 for two decimal digits of accuracy.
+        # ! Multiply by 100 for two decimal digits of accuracy.
         for byte in int(temperature * 100).to_bytes(length=2, byteorder='little', signed=True):
             value.append(dbus.Byte(byte))
 
